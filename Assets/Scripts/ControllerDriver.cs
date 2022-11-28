@@ -7,6 +7,7 @@ public class ControllerDriver : MonoBehaviour
     public Transform first_joint;
 
     public float speakerLength = 0.2f;
+    public float maxRange = 0.6f;
 
     Vector3 mOffset;
     float mZCoord;
@@ -35,6 +36,13 @@ public class ControllerDriver : MonoBehaviour
     private void OnMouseDrag()
     {
         transform.position = GetMouseAsWorldPoint() + mOffset;
+        
+        if (OutOfRange(first_joint.position, target.position, transform.position, speakerLength, maxRange))
+        {
+            transform.position = Vector3.MoveTowards(transform.position, first_joint.position, Vector3.Distance(transform.position, first_joint.position) - maxRange);
+        }
+
+        transform.position = Vector3.MoveTowards(transform.position, target.position, Vector3.Distance(transform.position, target.position) - radius);
     }
 
     //allows changing radius around which the speaker orbits. Called from radius input field
@@ -50,10 +58,10 @@ public class ControllerDriver : MonoBehaviour
     }
 
     //reterns whether endeffectortwin is placed outside the range of the xarm
-    bool OutOfRange(Vector3 first_joint, Vector3 target, Vector3 controller, float speakerLength)
+    bool OutOfRange(Vector3 first_joint, Vector3 target, Vector3 controller, float speakerLength, float maxRange)
     {
-        Vector3 endeffector = Vector3.MoveTowards(controller, target, -speakerLength);
-        return Vector3.Distance(first_joint,endeffector) > 0.6f;
+        Vector3 endeffector = Vector3.MoveTowards(target, controller, radius + speakerLength);
+        return Vector3.Distance(first_joint,endeffector) > maxRange;
     }
 
     //sets initial radius to 1 meter and sets initial transform of object
@@ -68,9 +76,9 @@ public class ControllerDriver : MonoBehaviour
     //allows a constant offset to the sphere
     void Update()
     {
-        if (OutOfRange(first_joint.position, target.position, transform.position, speakerLength))
+        if (OutOfRange(first_joint.position, target.position, transform.position, speakerLength, maxRange))
         {
-            transform.position = Vector3.MoveTowards(transform.position, first_joint.position, Vector3.Distance(transform.position, first_joint.position) - 0.6f);
+            transform.position = Vector3.MoveTowards(transform.position, first_joint.position, Vector3.Distance(transform.position, first_joint.position) - maxRange);
         }
 
         transform.position = Vector3.MoveTowards(transform.position, target.position, Vector3.Distance(transform.position, target.position) - radius);
