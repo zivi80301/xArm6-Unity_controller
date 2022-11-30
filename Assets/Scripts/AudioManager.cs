@@ -1,18 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    AudioSource TestSound;
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        TestSound = GetComponent<AudioSource>();
+    }
+    public void OnPlayButton()
+    {
+        TestSound.Play();
+        print("Playing Sound");
     }
 }
