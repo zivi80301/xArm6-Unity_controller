@@ -323,7 +323,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   topicName: pos_rot
   cube: {fileID: 1808414182}
-  publishMessageFrequency: 0.1
+  publishMessageFrequency: 0.2
 --- !u!1 &78142881
 GameObject:
   m_ObjectHideFlags: 0
